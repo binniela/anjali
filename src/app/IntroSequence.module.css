@@ -1,0 +1,592 @@
+.landing {
+  --intro-duration: 5200ms;
+  --img-w0: 12vw;
+  --img-h0: 7.5vw;
+  --img-w1: 20vw;
+  --img-h1: 12.5vw;
+  --gap-0: 0.35vw;
+  --gap-1: 0.7vw;
+  --gap-2: 6.2vw;
+  --gap-3: 10.6vw;
+  --mid-image-width: var(--img-w1);
+  --mid-word-gap: clamp(24px, 2.6vw, 48px);
+  --hero-title-left: clamp(32px, 5.4vw, 74px);
+  --hero-title-bottom: clamp(86px, 11vh, 124px);
+  --hero-title-size: clamp(104px, 17vw, 280px);
+  --hero-title-top: calc(
+    100svh - var(--hero-title-bottom) - var(--hero-title-size) * 0.82
+  );
+  /*
+    Final lockup offsets are em-based so the asymmetric words (both Inter Tight
+    900 — "Anjali" is 2.518em wide, "Lata" 1.896em) end up optically centered as
+    one title. Derived from a 0.30em word gap:
+      gap-first = (gap - (Wa - Wl)) / 2,  gap-last = (gap + (Wa - Wl)) / 2
+  */
+  --gap-end-first: -0.161em;
+  --gap-end-last: 0.461em;
+  /* Name sits low in the frame like the reference (baseline near the bottom). */
+  background: #fff;
+  color: #050505;
+  min-height: 100svh;
+  overflow: hidden;
+  /* Pinned at the viewport top: the content sheet slides up and covers it. */
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.heroNav {
+  align-items: center;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  display: flex;
+  justify-content: space-between;
+  left: 0;
+  opacity: 0;
+  padding: clamp(22px, 3vw, 42px) clamp(28px, 4.6vw, 60px);
+  pointer-events: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition: background-color 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    padding 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(-8px);
+  z-index: 50;
+}
+
+.heroLogo {
+  display: inline-flex;
+  height: clamp(24px, 2.8vw, 38px);
+  overflow: hidden;
+  width: clamp(38px, 4.5vw, 58px);
+}
+
+.heroLogo img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.75);
+  width: 100%;
+}
+
+.heroLinks {
+  align-items: center;
+  display: flex;
+  gap: clamp(26px, 4vw, 58px);
+}
+
+.heroLinks a {
+  color: #050505;
+  font-family: var(--font-instrument-sans), "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(10px, 0.8vw, 12px);
+  font-weight: 500;
+  letter-spacing: 0.36em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.heroLinks a:hover,
+.heroLogo:hover {
+  opacity: 0.62;
+}
+
+:global(body.past-hero) .heroNav {
+  background: rgba(240, 237, 230, 0.74);
+  border-bottom-color: rgba(5, 5, 5, 0.06);
+  box-shadow: 0 10px 26px rgba(5, 5, 5, 0.05);
+  padding-bottom: 16px;
+  padding-top: 16px;
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  backdrop-filter: blur(16px) saturate(1.6);
+}
+
+:global(body.intro-nav-ready) .heroNav,
+:global(body.past-hero) .heroNav {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/*
+  Timeline (percentages of --intro-duration, matched to the reference video):
+    0%      – 7.5%   blank white screen
+    7.5%    – 12.5%  words pop in small, centered, tight together
+    12.5%   – 24%    words hold close, like a natural title lockup
+    24%     – 42%    words split outward as the photo appears and grows
+    30%              image pops into the gap, small
+    30%     – 42%    image grows to its intermediate "paused" size
+    42%     – 56%    image HOLDS while the remaining photos cut through
+    60%              final portrait cuts in (the one that expands out)
+    60%     – 80%    final portrait holds for a calm beat
+    80%     – 94%    portrait expands to full screen, words scale
+                     up and travel to the top
+    94%     – 100%   final hero composition holds
+*/
+
+.imageWindow {
+  animation: image-pull-open var(--intro-duration) both;
+  height: var(--img-h0);
+  left: 50%;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--img-w0);
+  z-index: 1;
+}
+
+/* Scroll parallax target: transformed from JS, holds all photo layers. */
+.parallax {
+  inset: 0;
+  position: absolute;
+  will-change: transform;
+}
+
+/* Photos hard-cut: each layer snaps on top of the previous one, no fades.
+   Per-layer animation-delay is set inline from the component. */
+.imageLayer {
+  animation: photo-cut 20ms linear both;
+  background-position: center;
+  background-size: cover;
+  inset: 0;
+  opacity: 0;
+  position: absolute;
+}
+
+/* Final portrait: keep the subject's face in frame when the landscape image is
+   cover-cropped on taller viewports. */
+.imageEnd {
+  background-position: 50% 34%;
+}
+
+.nameLockup {
+  inset: 0;
+  margin: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 4;
+}
+
+.firstName,
+.lastName {
+  animation-duration: var(--intro-duration);
+  animation-fill-mode: both;
+  display: block;
+  font-size: var(--hero-title-size);
+  line-height: 0.9;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.firstName {
+  animation-name: first-name-pull;
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  transform-origin: right center;
+}
+
+.lastName {
+  animation-name: last-name-pull;
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  transform-origin: left center;
+}
+
+.heroCopy {
+  animation: final-copy-enter var(--intro-duration) ease both;
+  bottom: calc(var(--hero-title-bottom) + var(--hero-title-size) * 0.86);
+  left: var(--hero-title-left);
+  pointer-events: none;
+  position: absolute;
+  right: clamp(24px, 5vw, 64px);
+  z-index: 5;
+}
+
+.heroCopy p {
+  color: #050505;
+  font-family: var(--font-instrument-sans), "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(10px, 0.9vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  line-height: 1;
+  margin: 0 0 clamp(18px, 2.4vh, 28px) clamp(3px, 0.35vw, 6px);
+  text-transform: uppercase;
+}
+
+@keyframes first-name-pull {
+  0%,
+  7.5% {
+    animation-timing-function: ease-out;
+    color: #050505;
+    opacity: 0;
+    right: calc(50% + var(--gap-0));
+    top: 50%;
+    transform: translateY(-50%) scale(0.2);
+  }
+
+  12.5% {
+    opacity: 1;
+    right: calc(50% + var(--gap-1));
+    top: 50%;
+    transform: translateY(-50%) scale(0.2);
+  }
+
+  24% {
+    animation-timing-function: cubic-bezier(0.42, 0, 0.2, 1);
+    opacity: 1;
+    right: calc(50% + var(--gap-1));
+    top: 50%;
+    transform: translateY(-50%) scale(0.2);
+  }
+
+  42% {
+    right: calc(
+      50% + var(--mid-image-width) * 0.5 + var(--mid-word-gap)
+    );
+    top: 50%;
+    transform: translateY(-50%) scale(0.24);
+  }
+
+  /* Hold spread apart, framing the intermediate image as it cycles. */
+  80% {
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+    color: #050505;
+    right: calc(
+      50% + var(--mid-image-width) * 0.5 + var(--mid-word-gap)
+    );
+    top: 50%;
+    transform: translateY(-50%) scale(0.24);
+  }
+
+  94%,
+  100% {
+    color: #171717;
+    opacity: 1;
+    left: var(--hero-title-left);
+    right: auto;
+    top: var(--hero-title-top);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes last-name-pull {
+  0%,
+  7.5% {
+    animation-timing-function: ease-out;
+    color: #050505;
+    left: calc(50% + var(--gap-0));
+    opacity: 0;
+    top: 50%;
+    transform: translateY(-50%) scale(0.2);
+  }
+
+  12.5% {
+    left: calc(50% + var(--gap-1));
+    opacity: 1;
+    top: 50%;
+    transform: translateY(-50%) scale(0.2);
+  }
+
+  24% {
+    animation-timing-function: cubic-bezier(0.42, 0, 0.2, 1);
+    left: calc(50% + var(--gap-1));
+    opacity: 1;
+    top: 50%;
+    transform: translateY(-50%) scale(0.2);
+  }
+
+  42% {
+    left: calc(50% + var(--mid-image-width) * 0.5 + var(--mid-word-gap));
+    top: 50%;
+    transform: translateY(-50%) scale(0.24);
+  }
+
+  /* Hold spread apart, framing the intermediate image as it cycles. */
+  80% {
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+    color: #050505;
+    left: calc(50% + var(--mid-image-width) * 0.5 + var(--mid-word-gap));
+    top: 50%;
+    transform: translateY(-50%) scale(0.24);
+  }
+
+  94%,
+  100% {
+    color: #171717;
+    left: calc(var(--hero-title-left) + var(--hero-title-size) * 2.42);
+    opacity: 1;
+    top: var(--hero-title-top);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes image-pull-open {
+  0%,
+  30% {
+    height: var(--img-h0);
+    opacity: 0;
+    width: var(--img-w0);
+  }
+
+  30.2% {
+    animation-timing-function: cubic-bezier(0.42, 0, 0.2, 1);
+    height: var(--img-h0);
+    opacity: 1;
+    width: var(--img-w0);
+  }
+
+  42% {
+    height: var(--img-h1);
+    opacity: 1;
+    width: var(--img-w1);
+  }
+
+  /* Hold at the intermediate size while extra photos cut through. */
+  80% {
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+    height: var(--img-h1);
+    opacity: 1;
+    width: var(--img-w1);
+  }
+
+  94%,
+  100% {
+    height: 100svh;
+    opacity: 1;
+    width: 100vw;
+  }
+}
+
+@keyframes photo-cut {
+  to {
+    opacity: 1;
+  }
+}
+
+.scrollCueShell {
+  bottom: clamp(20px, 3.2vh, 34px);
+  pointer-events: none;
+  position: absolute;
+  right: clamp(20px, 2.8vw, 40px);
+  z-index: 4;
+}
+
+.scrollCue {
+  align-items: center;
+  animation: cue-enter var(--intro-duration) ease both;
+  color: #fff;
+  display: flex;
+  font-family: var(--font-instrument-sans), "Helvetica Neue", Arial, sans-serif;
+  font-size: 0;
+  font-style: normal;
+  font-weight: 500;
+  gap: 0;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  margin: 0;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.24);
+}
+
+.scrollCueArrow {
+  animation: cue-bob 2200ms cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  display: inline-block;
+  font-size: 20px;
+}
+
+/* Idle state: the intro is paused on the name, waiting for a scroll. Show a
+   dark "scroll to begin" cue over the light background. */
+.idle .scrollCue {
+  animation: none;
+  color: #050505;
+  font-size: 11px;
+  gap: 12px;
+  opacity: 1;
+  text-shadow: none;
+  text-transform: uppercase;
+}
+
+.idle .scrollCueArrow {
+  font-size: 13px;
+}
+
+.scrollCueLabel {
+  font-size: inherit;
+  letter-spacing: 0.16em;
+}
+
+/* Enters just after the hero settles. */
+@keyframes cue-enter {
+  0%,
+  94% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cue-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+@keyframes final-copy-enter {
+  0%,
+  86% {
+    opacity: 0;
+  }
+
+  94%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 981px) {
+  .firstName,
+  .lastName {
+    font-size: var(--hero-title-size);
+  }
+}
+
+@media (max-width: 980px) {
+  .landing {
+    --img-w0: 34vw;
+    --img-h0: 21vw;
+    --img-w1: 56vw;
+    --img-h1: 35vw;
+    --gap-0: 0.8vw;
+    --gap-1: 1.55vw;
+    --gap-2: 18vw;
+    --gap-3: 29vw;
+    --mid-word-gap: clamp(28px, 4vw, 44px);
+    --hero-title-size: clamp(78px, 17.2vw, 150px);
+  }
+}
+
+@media (max-width: 560px) {
+  .landing {
+    --img-w0: 42vw;
+    --img-h0: 27vw;
+    --img-w1: 68vw;
+    --img-h1: 44vw;
+    --gap-0: 1vw;
+    --gap-1: 2vw;
+    --gap-2: 22vw;
+    --gap-3: 35vw;
+    --mid-word-gap: clamp(18px, 4vw, 28px);
+    --hero-title-left: 20px;
+    --hero-title-bottom: 86px;
+    --hero-title-size: clamp(66px, 20vw, 98px);
+  }
+
+  .heroNav {
+    align-items: flex-start;
+    padding: 22px 20px;
+  }
+
+  .heroLogo {
+    height: 26px;
+    width: 40px;
+  }
+
+  .heroLinks {
+    gap: 16px;
+  }
+
+  .heroLinks a {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+  }
+
+  .heroCopy {
+    bottom: calc(var(--hero-title-bottom) + var(--hero-title-size) * 0.9);
+    left: var(--hero-title-left);
+    right: 20px;
+  }
+
+  .heroCopy p {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    margin-bottom: 14px;
+  }
+
+  .firstName,
+  .lastName {
+    line-height: 0.98;
+  }
+
+  .scrollCueShell {
+    bottom: 22px;
+    left: 20px;
+    right: auto;
+  }
+
+  .scrollCue {
+    font-size: 10px;
+    gap: 8px;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .imageWindow {
+    animation: none;
+    height: 100svh;
+    opacity: 1;
+    width: 100vw;
+  }
+
+  .imageLayer,
+  .nameLockup {
+    animation: none;
+    opacity: 1;
+  }
+
+  .heroCopy {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .scrollCue,
+  .scrollCueArrow {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .firstName {
+    color: #050505;
+    left: var(--hero-title-left);
+    right: auto;
+    top: var(--hero-title-top);
+    transform: translateY(0) scale(1);
+  }
+
+  .lastName {
+    color: #050505;
+    left: calc(var(--hero-title-left) + var(--hero-title-size) * 2.42);
+    top: var(--hero-title-top);
+    transform: translateY(0) scale(1);
+  }
+}
