@@ -15,8 +15,8 @@ const INTRO_HOLD_MS = 650;
 // holds for about a second, then expands to full screen. Fractions of the
 // duration.
 const CYCLE_START = 0.3;
-const CYCLE_END = 0.6;
-const END_CUT = 0.64;
+const CYCLE_END = 0.52;
+const END_CUT = 0.56;
 
 const cyclePhotos = [
   "/portfolio/coastal-california/03-dscf1789.jpg",

@@ -257,7 +257,7 @@
   }
 
   /* Hold spread apart, framing the intermediate image as it cycles. */
-  74% {
+  68% {
     animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     color: #050505;
     right: calc(
@@ -267,7 +267,7 @@
     transform: translateY(-50%) scale(0.24);
   }
 
-  92%,
+  88%,
   100% {
     color: #171717;
     opacity: 1;
@@ -311,7 +311,7 @@
   }
 
   /* Hold spread apart, framing the intermediate image as it cycles. */
-  74% {
+  68% {
     animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     color: #050505;
     left: calc(50% + var(--mid-image-width) * 0.5 + var(--mid-word-gap));
@@ -319,7 +319,7 @@
     transform: translateY(-50%) scale(0.24);
   }
 
-  92%,
+  88%,
   100% {
     color: #171717;
     left: calc(var(--hero-title-left) + var(--hero-title-size) * 2.42);
@@ -351,14 +351,14 @@
   }
 
   /* Hold at the intermediate size while extra photos cut through. */
-  74% {
+  68% {
     animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     height: var(--img-h1);
     opacity: 1;
     width: var(--img-w1);
   }
 
-  92%,
+  88%,
   100% {
     height: 100svh;
     opacity: 1;
@@ -426,7 +426,7 @@
 /* Enters just after the hero settles. */
 @keyframes cue-enter {
   0%,
-  92% {
+  88% {
     opacity: 0;
     transform: translateY(10px);
   }
@@ -454,7 +454,7 @@
     opacity: 0;
   }
 
-  92%,
+  88%,
   100% {
     opacity: 1;
   }
