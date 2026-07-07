@@ -471,28 +471,33 @@
   .landing {
     --img-w0: 34vw;
     --img-h0: 21vw;
-    --img-w1: 56vw;
-    --img-h1: 35vw;
+    --img-w1: 64vw;
+    --img-h1: 46svh;
     --gap-0: 0.8vw;
     --gap-1: 1.55vw;
     --gap-2: 18vw;
     --gap-3: 29vw;
-    --mid-word-gap: clamp(28px, 4vw, 44px);
+    --mid-image-width: 48vw;
+    --mid-word-gap: clamp(18px, 3vw, 36px);
     --hero-title-size: clamp(78px, 17.2vw, 150px);
   }
 }
 
 @media (max-width: 560px) {
   .landing {
-    --img-w0: 42vw;
-    --img-h0: 27vw;
-    --img-w1: 68vw;
-    --img-h1: 44vw;
+    --img-w0: 44vw;
+    --img-h0: 30vw;
+    /* Portrait viewport: the intermediate image fills most of the screen
+       instead of floating as a small letterbox, and the flanking words tuck
+       just over its left/right edges rather than flying to the far margins. */
+    --img-w1: 88vw;
+    --img-h1: 56svh;
     --gap-0: 1vw;
     --gap-1: 2vw;
     --gap-2: 22vw;
     --gap-3: 35vw;
-    --mid-word-gap: clamp(18px, 4vw, 28px);
+    --mid-image-width: 40vw;
+    --mid-word-gap: clamp(10px, 2.4vw, 18px);
     --hero-title-left: 20px;
     --hero-title-size: clamp(66px, 20vw, 98px);
   }
