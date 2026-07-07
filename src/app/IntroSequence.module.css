@@ -1,5 +1,5 @@
 .landing {
-  --intro-duration: 5200ms;
+  --intro-duration: 4300ms;
   --img-w0: 12vw;
   --img-h0: 7.5vw;
   --img-w1: 20vw;
@@ -24,7 +24,6 @@
   */
   --gap-end-first: -0.161em;
   --gap-end-last: 0.461em;
-  /* Name sits low in the frame like the reference (baseline near the bottom). */
   background: #fff;
   color: #050505;
   min-height: 100svh;
@@ -258,7 +257,7 @@
   }
 
   /* Hold spread apart, framing the intermediate image as it cycles. */
-  80% {
+  74% {
     animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     color: #050505;
     right: calc(
@@ -268,7 +267,7 @@
     transform: translateY(-50%) scale(0.24);
   }
 
-  94%,
+  92%,
   100% {
     color: #171717;
     opacity: 1;
@@ -312,7 +311,7 @@
   }
 
   /* Hold spread apart, framing the intermediate image as it cycles. */
-  80% {
+  74% {
     animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     color: #050505;
     left: calc(50% + var(--mid-image-width) * 0.5 + var(--mid-word-gap));
@@ -320,7 +319,7 @@
     transform: translateY(-50%) scale(0.24);
   }
 
-  94%,
+  92%,
   100% {
     color: #171717;
     left: calc(var(--hero-title-left) + var(--hero-title-size) * 2.42);
@@ -352,14 +351,14 @@
   }
 
   /* Hold at the intermediate size while extra photos cut through. */
-  80% {
+  74% {
     animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     height: var(--img-h1);
     opacity: 1;
     width: var(--img-w1);
   }
 
-  94%,
+  92%,
   100% {
     height: 100svh;
     opacity: 1;
@@ -386,12 +385,13 @@
   animation: cue-enter var(--intro-duration) ease both;
   color: #fff;
   display: flex;
-  font-family: var(--font-instrument-sans), "Helvetica Neue", Arial, sans-serif;
+  /* Same face as the "Anjali Lata" lockup (Playfair Display). */
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
   font-size: 0;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   gap: 0;
-  letter-spacing: 0.14em;
+  letter-spacing: normal;
   line-height: 1;
   margin: 0;
   text-shadow: 0 1px 14px rgba(0, 0, 0, 0.24);
@@ -408,26 +408,25 @@
 .idle .scrollCue {
   animation: none;
   color: #050505;
-  font-size: 11px;
-  gap: 12px;
+  font-size: 16px;
+  gap: 10px;
   opacity: 1;
   text-shadow: none;
-  text-transform: uppercase;
 }
 
 .idle .scrollCueArrow {
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .scrollCueLabel {
   font-size: inherit;
-  letter-spacing: 0.16em;
+  letter-spacing: normal;
 }
 
 /* Enters just after the hero settles. */
 @keyframes cue-enter {
   0%,
-  94% {
+  92% {
     opacity: 0;
     transform: translateY(10px);
   }
@@ -455,7 +454,7 @@
     opacity: 0;
   }
 
-  94%,
+  92%,
   100% {
     opacity: 1;
   }
@@ -495,7 +494,6 @@
     --gap-3: 35vw;
     --mid-word-gap: clamp(18px, 4vw, 28px);
     --hero-title-left: 20px;
-    --hero-title-bottom: 86px;
     --hero-title-size: clamp(66px, 20vw, 98px);
   }
 

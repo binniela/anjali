@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { AnchorLink } from "./anchor-link";
 import styles from "./IntroSequence.module.css";
 
-const INTRO_DURATION_MS = 5200;
+const INTRO_DURATION_MS = 4300;
 const INTRO_HOLD_MS = 650;
 
 // Photos hard-cut in sequence. The first few land while the small window grows;
@@ -14,15 +14,18 @@ const INTRO_HOLD_MS = 650;
 // last cycle photo cuts at CYCLE_END. The final portrait cuts in at END_CUT,
 // holds for about a second, then expands to full screen. Fractions of the
 // duration.
-const CYCLE_START = 0.302;
-const CYCLE_END = 0.56;
-const END_CUT = 0.6;
+const CYCLE_START = 0.3;
+const CYCLE_END = 0.6;
+const END_CUT = 0.64;
 
 const cyclePhotos = [
   "/portfolio/coastal-california/03-dscf1789.jpg",
   "/portfolio/iceland-aurora/06-dsf5321.jpg",
   "/portfolio/garden-city-light/01-dscf1634.jpg",
   "/portfolio/yosemite-valley/01-dscf1941.jpg",
+  "/portfolio/iceland-aurora/01-dsf5513.jpg",
+  "/portfolio/coastal-california/01-dsf6300.jpg",
+  "/portfolio/yosemite-valley/04-dscf2013.jpg",
   "/portfolio/floral-editorials/08-dsf5043.jpg",
 ];
 
