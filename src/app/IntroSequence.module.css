@@ -223,15 +223,15 @@
 }
 
 @keyframes first-name-pull {
-  /* `left: auto` is repeated in every early keyframe on purpose: the final
-     frame sets a pixel `left`, and a missing `left` would flip discretely at
-     the timeline midpoint — pinning the box on both sides and letting the
-     text overflow onto the photo. */
+  /* Right-anchored for the whole timeline. The final frame must stay on
+     `right` too (as a calc placing the left edge at --hero-title-left):
+     switching to `left`/`right: auto` is non-interpolable, which made the
+     word teleport at the segment midpoint instead of gliding like "Lata".
+     2.241 = measured width of "Anjali" in em at this font/tracking. */
   0%,
   7.5% {
     animation-timing-function: ease-out;
     color: #050505;
-    left: auto;
     opacity: 0;
     right: calc(50% + var(--gap-0));
     top: 50%;
@@ -239,7 +239,6 @@
   }
 
   12.5% {
-    left: auto;
     opacity: 1;
     right: calc(50% + var(--gap-1));
     top: 50%;
@@ -248,7 +247,6 @@
 
   24% {
     animation-timing-function: cubic-bezier(0.42, 0, 0.2, 1);
-    left: auto;
     opacity: 1;
     right: calc(50% + var(--gap-1));
     top: 50%;
@@ -256,7 +254,6 @@
   }
 
   42% {
-    left: auto;
     right: calc(
       50% + var(--mid-image-width) * 0.5 + var(--mid-word-gap)
     );
@@ -268,7 +265,6 @@
   68% {
     animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     color: #050505;
-    left: auto;
     right: calc(
       50% + var(--mid-image-width) * 0.5 + var(--mid-word-gap)
     );
@@ -280,8 +276,9 @@
   100% {
     color: #171717;
     opacity: 1;
-    left: var(--hero-title-left);
-    right: auto;
+    right: calc(
+      100% - var(--hero-title-left) - var(--hero-title-size) * 2.241
+    );
     top: var(--hero-title-top);
     transform: translateY(0) scale(1);
   }
