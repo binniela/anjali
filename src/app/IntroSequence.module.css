@@ -12,7 +12,7 @@
   --mid-word-gap: clamp(24px, 2.6vw, 48px);
   --hero-title-left: clamp(32px, 5.4vw, 74px);
   --hero-title-bottom: clamp(86px, 11vh, 124px);
-  --hero-title-size: clamp(104px, 17vw, 280px);
+  --hero-title-size: 188px;
   --hero-title-top: calc(
     100svh - var(--hero-title-bottom) - var(--hero-title-size) * 0.82
   );
@@ -84,7 +84,7 @@
   font-family: var(--font-instrument-sans), "Helvetica Neue", Arial, sans-serif;
   font-size: clamp(10px, 0.8vw, 12px);
   font-weight: 500;
-  letter-spacing: 0.36em;
+  letter-spacing: 0.22em;
   line-height: 1;
   text-transform: uppercase;
 }
@@ -109,6 +109,23 @@
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
+}
+
+/* Static variant for pages without the hero (project detail): permanently
+   visible in the scrolled/frosted state, no entrance choreography. */
+.heroNavStatic,
+:global(body.past-hero) .heroNavStatic {
+  background: rgba(240, 237, 230, 0.74);
+  border-bottom-color: rgba(5, 5, 5, 0.06);
+  box-shadow: 0 10px 26px rgba(5, 5, 5, 0.05);
+  opacity: 1;
+  padding-bottom: 16px;
+  padding-top: 16px;
+  pointer-events: auto;
+  transform: none;
+  transition: none;
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  backdrop-filter: blur(16px) saturate(1.6);
 }
 
 /*
@@ -188,7 +205,7 @@
   font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
   font-style: normal;
   font-weight: 400;
-  letter-spacing: -0.055em;
+  letter-spacing: 0;
   transform-origin: right center;
 }
 
@@ -197,7 +214,7 @@
   font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
   font-style: normal;
   font-weight: 400;
-  letter-spacing: -0.055em;
+  letter-spacing: 0;
   transform-origin: left center;
 }
 
@@ -216,7 +233,7 @@
   font-family: var(--font-instrument-sans), "Helvetica Neue", Arial, sans-serif;
   font-size: clamp(10px, 0.9vw, 13px);
   font-weight: 500;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.18em;
   line-height: 1;
   margin: 0 0 clamp(18px, 2.4vh, 28px) clamp(3px, 0.35vw, 6px);
   text-transform: uppercase;
@@ -487,7 +504,7 @@
     --gap-3: 29vw;
     --mid-image-width: 56vw;
     --mid-word-gap: clamp(14px, 2.4vw, 24px);
-    --hero-title-size: clamp(78px, 17.2vw, 150px);
+    --hero-title-size: 128px;
   }
 }
 
@@ -506,7 +523,7 @@
     --mid-image-width: 60vw;
     --mid-word-gap: clamp(8px, 2vw, 12px);
     --hero-title-left: 20px;
-    --hero-title-size: clamp(66px, 20vw, 98px);
+    --hero-title-size: 76px;
   }
 
   .heroNav {
@@ -520,12 +537,12 @@
   }
 
   .heroLinks {
-    gap: 20px;
+    gap: 18px;
   }
 
   .heroLinks a {
     font-size: 10px;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.08em;
     /* invisible tap padding — keeps the bar slim but targets ~40px */
     margin: -15px 0;
     padding: 15px 2px;
@@ -539,7 +556,7 @@
 
   .heroCopy p {
     font-size: 9px;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.12em;
     margin-bottom: 14px;
   }
 

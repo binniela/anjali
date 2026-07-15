@@ -1,31 +1,12 @@
-import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { AnchorLink } from "./anchor-link";
 import { projects, type Project } from "./data";
 import { GalleryCard } from "./gallery-card";
-import { NavLinks } from "./nav-links";
+import { PortfolioNav } from "./IntroSequence";
 
-export function Sidebar({ back = false }: { back?: boolean }) {
-  return (
-    <aside className="rail" aria-label="Site navigation">
-      {back ? (
-        <Link href="/" className="back-link" aria-label="Back to gallery">
-          <span aria-hidden="true">&larr;</span>
-        </Link>
-      ) : null}
-      <NavLinks />
-      <div className="social-row">
-        <a
-          href="https://www.instagram.com/khaanakoma/"
-          aria-label="Instagram profile"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <InstagramIcon />
-        </a>
-      </div>
-    </aside>
-  );
+export function Sidebar() {
+  return null;
 }
 
 export function InstagramIcon() {
@@ -41,14 +22,13 @@ export function InstagramIcon() {
 
 export function Shell({
   children,
-  back = false,
 }: {
   children: ReactNode;
   back?: boolean;
 }) {
   return (
     <>
-      <Sidebar back={back} />
+      <PortfolioNav staticBar />
       <main className="content">{children}</main>
       <Footer />
     </>
@@ -64,13 +44,30 @@ export function Footer() {
   );
 }
 
-// Light editorial contact footer. Carries id="contact" so the glass-nav
+type ContactFooterVariant = "home" | "project";
+
+// Light editorial contact footer. Carries id="contact" so the top nav
 // "Contact" anchor still lands here.
-export function ContactFooter() {
+export function ContactFooter({
+  variant = "home",
+}: {
+  variant?: ContactFooterVariant;
+}) {
+  const className =
+    variant === "project"
+      ? "contact-footer contact-footer-project"
+      : "contact-footer";
+
   return (
-    <footer id="contact" className="contact-footer" aria-label="Contact">
+    <footer id="contact" className={className} aria-label="Contact">
       <div className="cf-decor" aria-hidden="true">
-        <img src="/portraits/footer-bridge.jpg" alt="" />
+        <Image
+          src="/portraits/footer-bridge.jpg"
+          alt=""
+          width={1200}
+          height={800}
+          sizes="(max-width: 680px) 66vw, 53vw"
+        />
       </div>
 
       <div className="cf-lead">
@@ -135,19 +132,19 @@ export function StatList({ project }: { project: Project }) {
   return (
     <dl className="stats">
       <div>
-        <dt>Location:</dt>
+        <dt>Location</dt>
         <dd>{project.location}</dd>
       </div>
       <div>
-        <dt>Date:</dt>
+        <dt>Date</dt>
         <dd>{project.date}</dd>
       </div>
       <div>
-        <dt>Camera:</dt>
+        <dt>Camera</dt>
         <dd>{project.camera}</dd>
       </div>
       <div>
-        <dt>Lens:</dt>
+        <dt>Lens</dt>
         <dd>{project.lens}</dd>
       </div>
     </dl>

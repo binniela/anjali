@@ -25,7 +25,7 @@ export function AnchorLink({
     const navHeight =
       (
         document.querySelector(".glass-nav") ??
-        document.querySelector('[aria-label="Hero navigation"]')
+        document.querySelector('[aria-label="Site navigation"]')
       )?.getBoundingClientRect().height ?? 0;
     const targetTop =
       window.scrollY + target.getBoundingClientRect().top - navHeight;

@@ -6,6 +6,14 @@ import {
   Playfair_Display,
 } from "next/font/google";
 import "./globals.css";
+import {
+  absoluteUrl,
+  photographerName,
+  sharedOpenGraph,
+  siteDescription,
+  siteTitle,
+  siteUrl,
+} from "./metadata";
 
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
@@ -37,12 +45,36 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Anjali Lata - Winter Photography Portfolio",
-    template: "%s | Anjali Lata",
+    default: siteTitle,
+    template: `%s | ${photographerName}`,
   },
-  description:
-    "A restrained winter photography portfolio built with Next.js.",
+  description: siteDescription,
+  applicationName: photographerName,
+  authors: [{ name: photographerName, url: siteUrl }],
+  creator: photographerName,
+  publisher: photographerName,
+  alternates: {
+    canonical: siteUrl,
+  },
+  category: "photography",
+  keywords: [
+    "editorial photography",
+    "landscape photography",
+    "portrait photography",
+    "graduation photography",
+    "travel photography",
+    "San Mateo photographer",
+    "California photographer",
+  ],
+  openGraph: sharedOpenGraph(),
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+    images: [absoluteUrl("/og/anjali-lata-editorial-cover.jpg")],
+  },
   icons: {
     icon: "/favicon.svg",
   },

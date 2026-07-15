@@ -44,7 +44,12 @@ export function AboutSection() {
   return (
     <section id="about" className="about-editorial" aria-label="About Anjali Lata">
       <div className="about-photo">
-        <img src="/portraits/anjali-generated-portrait.webp" alt="Anjali Lata" />
+        <Image
+          src="/portraits/anjali-generated-portrait.webp"
+          alt="Anjali Lata"
+          fill
+          sizes="(max-width: 860px) 100vw, 50vw"
+        />
       </div>
 
       <div className="about-text">

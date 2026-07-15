@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 // Each cell is one photo linking to its parent project. `pos` tunes object-
@@ -137,10 +138,11 @@ const graduation: { hero: Cell; row: Cell[] } = {
 function Photo({ cell }: { cell: Cell }) {
   return (
     <Link className="eg-cell" href={project(cell.slug)} aria-label={cell.alt}>
-      <img
+      <Image
         src={cell.src}
         alt={cell.alt}
-        loading="lazy"
+        fill
+        sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 33vw"
         style={cell.pos ? { objectPosition: cell.pos } : undefined}
       />
     </Link>

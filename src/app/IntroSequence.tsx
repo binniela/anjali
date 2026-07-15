@@ -36,10 +36,17 @@ const cutDelayMs = (index: number, total: number) => {
   return Math.round(frac * INTRO_DURATION_MS);
 };
 
-export function PortfolioNav() {
+// Shared top navigation. On the homepage it fades in with the intro; with
+// `staticBar` (project pages) it renders immediately in its scrolled state.
+// Hrefs use "/#…" so AnchorLink smooth-scrolls on the homepage and falls back
+// to a normal navigation home from any other route.
+export function PortfolioNav({ staticBar = false }: { staticBar?: boolean }) {
   return (
-    <header className={styles.heroNav} aria-label="Hero navigation">
-      <AnchorLink className={styles.heroLogo} href="#gallery" aria-label="Gallery">
+    <header
+      className={`${styles.heroNav}${staticBar ? ` ${styles.heroNavStatic}` : ""}`}
+      aria-label="Site navigation"
+    >
+      <AnchorLink className={styles.heroLogo} href="/#gallery" aria-label="Gallery">
         <Image
           src="/brand/anjali-logo.png"
           alt=""
@@ -49,9 +56,9 @@ export function PortfolioNav() {
         />
       </AnchorLink>
       <nav className={styles.heroLinks} aria-label="Page sections">
-        <AnchorLink href="#gallery">Gallery</AnchorLink>
-        <AnchorLink href="#about">About</AnchorLink>
-        <AnchorLink href="#contact">Contact</AnchorLink>
+        <AnchorLink href="/#gallery">Gallery</AnchorLink>
+        <AnchorLink href="/#about">About</AnchorLink>
+        <AnchorLink href="/#contact">Contact</AnchorLink>
       </nav>
     </header>
   );
@@ -63,29 +70,27 @@ export function IntroSequence() {
   const cueRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // The fixed rail nav hides while the pinned hero is on screen and fades
-    // in once the content sheet covers it. This applies even under reduced
-    // motion — it is visibility logic, not decoration.
-    document.body.classList.add("has-hero");
+    // The top nav moves from hidden/hero mode into its frosted scrolled state
+    // once the content sheet covers enough of the pinned hero.
     document.body.classList.remove("intro-nav-ready");
-    const updateRail = () => {
+    const updateNav = () => {
       const heroHeight = heroRef.current?.offsetHeight || 1;
       document.body.classList.toggle(
         "past-hero",
         window.scrollY > heroHeight * 0.55
       );
     };
-    window.addEventListener("scroll", updateRail, { passive: true });
-    updateRail();
-    const cleanupRail = () => {
-      window.removeEventListener("scroll", updateRail);
-      document.body.classList.remove("has-hero", "past-hero");
+    window.addEventListener("scroll", updateNav, { passive: true });
+    updateNav();
+    const cleanupNav = () => {
+      window.removeEventListener("scroll", updateNav);
+      document.body.classList.remove("past-hero");
     };
 
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    if (reduceMotion) return cleanupRail;
+    if (reduceMotion) return cleanupNav;
 
     // Finite intro animations (everything except the infinite cue bob).
     const introAnims = () =>
@@ -200,7 +205,7 @@ export function IntroSequence() {
     onScroll();
 
     return () => {
-      cleanupRail();
+      cleanupNav();
       cleanupFns.forEach((fn) => fn());
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
