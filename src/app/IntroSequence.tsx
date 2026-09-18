@@ -31,6 +31,12 @@ const cyclePhotos = [
 
 const endPhoto = "/portraits/anjali-hero-end.jpg";
 
+// The layers are CSS backgrounds, so route them through the Next image
+// optimizer by hand: cycle photos only ever show as a mid-size card, while the
+// end photo expands to fill the screen.
+const optimized = (src: string, width: number) =>
+  `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=75`;
+
 const cutDelayMs = (index: number, total: number) => {
   const frac = CYCLE_START + (CYCLE_END - CYCLE_START) * (index / (total - 1));
   return Math.round(frac * INTRO_DURATION_MS);
@@ -50,9 +56,10 @@ export function PortfolioNav({ staticBar = false }: { staticBar?: boolean }) {
         <Image
           src="/brand/anjali-logo.png"
           alt=""
-          height={1024}
+          height={512}
+          sizes="112px"
           priority
-          width={1536}
+          width={768}
         />
       </AnchorLink>
       <nav className={styles.heroLinks} aria-label="Page sections">
@@ -228,7 +235,7 @@ export function IntroSequence() {
               key={src}
               className={styles.imageLayer}
               style={{
-                backgroundImage: `url(${src})`,
+                backgroundImage: `url(${optimized(src, 1200)})`,
                 animationDelay: `${cutDelayMs(i, cyclePhotos.length)}ms`,
               }}
             />
@@ -237,7 +244,7 @@ export function IntroSequence() {
           <span
             className={`${styles.imageLayer} ${styles.imageEnd}`}
             style={{
-              backgroundImage: `url(${endPhoto})`,
+              backgroundImage: `url(${optimized(endPhoto, 1920)})`,
               animationDelay: `${Math.round(END_CUT * INTRO_DURATION_MS)}ms`,
             }}
           />

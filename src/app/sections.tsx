@@ -16,8 +16,9 @@ export function GlassNav() {
         <Image
           src="/brand/anjali-logo.png"
           alt=""
-          height={1024}
-          width={1536}
+          height={512}
+          sizes="112px"
+          width={768}
         />
       </AnchorLink>
       <nav aria-label="Page sections">
@@ -45,7 +46,7 @@ export function AboutSection() {
     <section id="about" className="about-editorial" aria-label="About Anjali Lata">
       <div className="about-photo">
         <Image
-          src="/portraits/anjali-generated-portrait.webp"
+          src="/portraits/anjali-portrait.jpg"
           alt="Anjali Lata"
           fill
           sizes="(max-width: 860px) 100vw, 50vw"

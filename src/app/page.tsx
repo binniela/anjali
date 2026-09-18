@@ -10,7 +10,7 @@ export default function Home() {
     "@type": "Person",
     name: photographerName,
     url: siteUrl,
-    image: absoluteUrl("/portraits/anjali-generated-portrait.webp"),
+    image: absoluteUrl("/portraits/anjali-portrait.jpg"),
     jobTitle: "Editorial photographer",
     address: {
       "@type": "PostalAddress",
